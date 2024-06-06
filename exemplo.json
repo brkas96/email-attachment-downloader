@@ -1,0 +1,33 @@
+{
+  "accounts": [
+    {
+      "email": "xxxxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "xxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "xxxxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "xxxxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "xxxxxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "xxxxxxxx@gmail.com",
+      "password": "senhadeapp"
+    },
+    {
+      "email": "duck.smtp2@gmail.com",
+      "password": "udtgjoekevihldms"
+    }
+
+  ]
+}
