@@ -22,12 +22,14 @@ CONFIG_FILE = "config.json"
 DEFAULT_SAVE_DIR = str(user) + "\Anexos"
 desired_date = None  # Variável global para armazenar o diretório selecionado anteriormente
 
+
 def convert_to_brasilia_timezone(original_datetime):
     original_tz = tz.tzoffset(None, -8 * 60 * 60)  # Fuso horário original do e-mail (-08:00)
     brasilia_tz = tz.gettz("America/Sao_Paulo")
     original_datetime = original_datetime.replace(tzinfo=original_tz)
     brasilia_datetime = original_datetime.astimezone(brasilia_tz)
     return brasilia_datetime
+
 
 def download_attachments(mail, msg, save_attachments_dir):
     for part in msg.walk():
@@ -65,9 +67,11 @@ def open_folder_in_explorer(PREVIOUS_SAVE_DIR):
     elif system == "Linux":
         subprocess.run(["xdg-open", PREVIOUS_SAVE_DIR])
 
+
 def ensure_directory_exists(directory_path):
     if not os.path.exists(directory_path):
         os.makedirs(directory_path)
+
 
 def select_save_dir():
     global PREVIOUS_SAVE_DIR
@@ -87,12 +91,13 @@ def select_save_dir():
                 PREVIOUS_SAVE_DIR = save_attachments_dir
                 return save_attachments_dir
 
+
 def read_config():
     with open(CONFIG_FILE, "r") as f:
         return json.load(f)
 
-def monitor_keyboard_input():
 
+def monitor_keyboard_input():
     # Monitora a entrada de teclado usando a biblioteca 'keyboard'
     while True:
         try:
@@ -116,6 +121,7 @@ def get_email_datetime(msg):
     except:
         return None
 
+
 def select_account(accounts):
     print("Contas disponíveis:")
     for i, account in enumerate(accounts, 1):
@@ -130,10 +136,12 @@ def select_account(accounts):
                 print("Opção inválida. Tente novamente.")
         except ValueError:
             print("Entrada inválida. Digite um número.")
-            
+
+
 def auto_mode_select():
     return False if input("Deseja escolher manualmente a data em que os e-mails serão baixados? (Digite 's' para sim "
                           "ou deixe em branco para usar a data de hoje: ").lower() == "s" else True
+
 
 def get_desired_date(auto_mode=True):
     if not auto_mode:
@@ -152,19 +160,23 @@ def get_desired_date(auto_mode=True):
     else:
         return datetime.now().date()
 
+
 def connect_to_gmail(email, password):
     mail = imaplib.IMAP4_SSL("imap.gmail.com")
     mail.login(email, password)
     mail.select("inbox")
     return mail
 
+
 def mark_as_read(mail, msg_id):
     mail.store(msg_id, '+FLAGS', '\Seen')
+
 
 def mark_as_unread(mail, msg_id):
     mail.store(msg_id, '-FLAGS', '\Seen')
     unread = mail.store(msg_id, '-FLAGS', '\Seen')
     print("Retorno da função mark_as_unread", unread)
+
 
 def main():
     # Inicia a thread para monitorar a entrada de teclado em segundo plano
@@ -224,8 +236,8 @@ def main():
                             msg = email.message_from_bytes(raw_email)
                             ensure_directory_exists(save_attachments_dir)
                             try:
-                               download_attachments(mail, msg, save_attachments_dir)
-                               mark_as_read(mail, i)
+                                download_attachments(mail, msg, save_attachments_dir)
+                                mark_as_read(mail, i)
                             except Exception as e:
                                 mark_as_unread(mail, i)
                                 print("Erro no download, tentando marcar como não lido. Err: ", e
@@ -244,7 +256,6 @@ def main():
 
                 mail.expunge()
 
-
                 interval = 60
                 print(f"Aguardando {interval} segundos...")
                 time.sleep(interval)
@@ -261,6 +272,7 @@ def main():
             while True:
                 if input() == "\x12":
                     break
+
 
 if __name__ == "__main__":
     main()
